@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/authentication")
+@RequestMapping("/authentication")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
@@ -30,6 +30,13 @@ public class AuthenticationController {
     public ApiResponse<AuthenticationUserResponseBody> register(@RequestBody @Validated AuthenticationUserRequestBody authenticationUserRequestBody) {
         return ApiResponse.<AuthenticationUserResponseBody>builder()
                 .data(authenticationUserService.register(authenticationUserRequestBody))
+                .build();
+    }
+
+    @PostMapping("/login")
+    public ApiResponse<AuthenticationUserResponseBody> login(@RequestBody @Validated AuthenticationUserRequestBody authenticationUserRequestBody) {
+        return ApiResponse.<AuthenticationUserResponseBody>builder()
+                .data(authenticationUserService.login(authenticationUserRequestBody))
                 .build();
     }
 }

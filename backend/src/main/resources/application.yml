@@ -11,7 +11,11 @@ spring:
     show-sql: true
     open-in-view: false
 
-jwt:
-  signerKey: "16092005"
 
+jwt:
+  signerKey: "HDKdDVDEpABtpunTzN2QM2pbmVzDP5jht6WGykegNKgsKDVdDlbzFVmU1vDOVOHV"
+
+server:
+  servlet:
+    context-path: /api/v1
 
