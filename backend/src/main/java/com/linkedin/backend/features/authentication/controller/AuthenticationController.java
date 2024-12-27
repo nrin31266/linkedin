@@ -22,7 +22,7 @@ public class AuthenticationController {
     @GetMapping("/user")
     public ApiResponse<Object> getUser() {
         return ApiResponse.builder()
-                .data(authenticationUserService.getUser("nrin31266@yopmail.com"))
+                .data(authenticationUserService.getUser())
                 .build();
     }
 

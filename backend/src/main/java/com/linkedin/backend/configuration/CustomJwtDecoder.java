@@ -31,17 +31,13 @@ public class CustomJwtDecoder implements JwtDecoder {
             if (!isValidToken) {
                 throw new JwtException("Invalid token");
             }
-
-            Jwt jwt = new Jwt(
+            return new Jwt(
                     token,
                     signedJWT.getJWTClaimsSet().getIssueTime().toInstant(),
                     signedJWT.getJWTClaimsSet().getExpirationTime().toInstant(),
                     signedJWT.getHeader().toJSONObject(),
                     signedJWT.getJWTClaimsSet().getClaims()
             );
-
-
-            return jwt;
         } catch (ParseException | JOSEException e) {
             throw new JwtException(e.getMessage());
         }
