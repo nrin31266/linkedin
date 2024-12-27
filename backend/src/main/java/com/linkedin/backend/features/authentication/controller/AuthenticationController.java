@@ -8,6 +8,7 @@ import com.linkedin.backend.features.authentication.service.AuthenticationUserSe
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +27,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ApiResponse<AuthenticationUserResponseBody> register(@RequestBody AuthenticationUserRequestBody authenticationUserRequestBody) {
+    public ApiResponse<AuthenticationUserResponseBody> register(@RequestBody @Validated AuthenticationUserRequestBody authenticationUserRequestBody) {
         return ApiResponse.<AuthenticationUserResponseBody>builder()
                 .data(authenticationUserService.register(authenticationUserRequestBody))
                 .build();
