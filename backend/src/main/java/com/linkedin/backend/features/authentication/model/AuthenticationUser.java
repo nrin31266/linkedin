@@ -1,6 +1,7 @@
 package com.linkedin.backend.features.authentication.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,5 +20,6 @@ public class AuthenticationUser {
     Long id;
     @Column(unique = true, nullable = false)
     String email;
+    @JsonIgnore
     String password;
 }

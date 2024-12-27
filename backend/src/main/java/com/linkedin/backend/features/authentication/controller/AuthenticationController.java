@@ -1,13 +1,14 @@
 package com.linkedin.backend.features.authentication.controller;
 
 
+import com.linkedin.backend.dto.ApiResponse;
+import com.linkedin.backend.features.authentication.dto.request.AuthenticationUserRequestBody;
+import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
 import com.linkedin.backend.features.authentication.service.AuthenticationUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/authentication")
@@ -18,7 +19,16 @@ public class AuthenticationController {
 
 
     @GetMapping("/user")
-    public Object getUser() {
-        return authenticationUserService.getUser("nrin31266@yopmail.com");
+    public ApiResponse<Object> getUser() {
+        return ApiResponse.builder()
+                .data(authenticationUserService.getUser("nrin31266@yopmail.com"))
+                .build();
+    }
+
+    @PostMapping("/register")
+    public ApiResponse<AuthenticationUserResponseBody> register(@RequestBody AuthenticationUserRequestBody authenticationUserRequestBody) {
+        return ApiResponse.<AuthenticationUserResponseBody>builder()
+                .data(authenticationUserService.register(authenticationUserRequestBody))
+                .build();
     }
 }
