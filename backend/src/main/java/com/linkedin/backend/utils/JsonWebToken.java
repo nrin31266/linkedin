@@ -61,14 +61,4 @@ public class JsonWebToken {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         return signedJWT.verify(verifier);
     }
-
-    public boolean isValidToken(String token) throws ParseException, JOSEException {
-        if(!isSignerKey(token)){
-            return false;
-        }
-        if(isExpired(token)){
-            return false;
-        }
-        return true;
-    }
 }

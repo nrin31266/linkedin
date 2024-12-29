@@ -27,10 +27,15 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            boolean isValidToken = jsonWebToken.isValidToken(token);
-            if (!isValidToken) {
-                throw new JwtException("Invalid token");
+
+            if(!jsonWebToken.isSignerKey(token)){
+                throw new JwtException("Signer key is not valid");
             }
+
+            if(jsonWebToken.isExpired(token)){
+                throw new JwtException("Token expired");
+            }
+
             return new Jwt(
                     token,
                     signedJWT.getJWTClaimsSet().getIssueTime().toInstant(),

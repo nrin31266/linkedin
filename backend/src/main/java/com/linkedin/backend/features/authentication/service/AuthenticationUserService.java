@@ -30,17 +30,21 @@ public class AuthenticationUserService {
     }
 
     public AuthenticationUserResponseBody register(AuthenticationUserRequestBody authenticationUserRequestBody) {
-        authenticationUserRepository.save(
-                AuthenticationUser.builder()
-                        .email(authenticationUserRequestBody.getEmail())
-                        .password(passwordEncoder.encode(authenticationUserRequestBody.getPassword()))
-                        .build()
-        );
+        try{
+            AuthenticationUser authenticationUser = authenticationUserRepository.save(
+                    AuthenticationUser.builder()
+                            .email(authenticationUserRequestBody.getEmail())
+                            .password(passwordEncoder.encode(authenticationUserRequestBody.getPassword()))
+                            .build()
+            );
 
-        return AuthenticationUserResponseBody.builder()
-                .token("token")
-                .message("User registered successfully")
-                .build();
+            return AuthenticationUserResponseBody.builder()
+                    .token(jsonWebToken.generateToken(authenticationUser))
+                    .message("User registered successfully")
+                    .build();
+        }catch (Exception e){
+            throw new RuntimeException("Cannot register user");
+        }
     }
 
     public AuthenticationUserResponseBody login(AuthenticationUserRequestBody authenticationUserRequestBody) {

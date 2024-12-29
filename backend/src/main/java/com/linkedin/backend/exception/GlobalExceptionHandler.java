@@ -29,4 +29,14 @@ public class GlobalExceptionHandler {
                 .build());
     }
 
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ApiResponse> handleException(Exception e) {
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
+        log.error(errorCode.getMessage(), e);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(e.getMessage())
+                .build());
+    }
+
 }
