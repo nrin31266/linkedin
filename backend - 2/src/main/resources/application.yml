@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/linkedin?createDatabaseIfNotExist=true'
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+  mail:
+    host: 'localhost'
+    port: 1025
+    protocol: 'smtp'
+    properties:
+      mail:
+        smtp:
+          auth: false
+    default-encoding: UTF-8
+
+jwt:
+  signerKey: "HDKdDVDEpABtpunTzN2QM2pbmVzDP5jht6WGykegNKgsKDVdDlbzFVmU1vDOVOHV"
+
+server:
+  servlet:
+    context-path: /api/v1
+
