@@ -3,7 +3,7 @@ package com.linkedin.backend.features.authentication.service;
 import com.linkedin.backend.exception.AppException;
 import com.linkedin.backend.exception.ErrorCode;
 import com.linkedin.backend.features.authentication.dto.request.AuthenticationUserRequestBody;
-import com.linkedin.backend.features.authentication.model.AuthenticationUser;
+import com.linkedin.backend.features.authentication.model.User;
 import com.linkedin.backend.features.authentication.repository.AuthenticationUserRepository;
 import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
 import com.linkedin.backend.features.authentication.utils.Encoder;
@@ -21,14 +21,14 @@ public class AuthenticationUserService {
     Encoder encoder;
     JsonWebToken jsonWebToken;
 
-    public Object getUser() {
-        return authenticationUserRepository.findByEmail("nrin31266@gmail.com").orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public User getUser(String email) {
+        return authenticationUserRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
     public AuthenticationUserResponseBody register(AuthenticationUserRequestBody authenticationUserRequestBody) {
         try{
-            AuthenticationUser authenticationUser = authenticationUserRepository.save(
-                    AuthenticationUser.builder()
+            User authenticationUser = authenticationUserRepository.save(
+                    User.builder()
                             .email(authenticationUserRequestBody.getEmail())
                             .password(encoder.encodePassword(authenticationUserRequestBody.getPassword()))
                             .build()
@@ -44,7 +44,7 @@ public class AuthenticationUserService {
     }
 
     public AuthenticationUserResponseBody login(AuthenticationUserRequestBody authenticationUserRequestBody) {
-        AuthenticationUser authenticationUser = authenticationUserRepository.findByEmail(authenticationUserRequestBody.getEmail())
+        User authenticationUser = authenticationUserRepository.findByEmail(authenticationUserRequestBody.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         if(!encoder.matches(authenticationUserRequestBody.getPassword(), authenticationUser.getPassword())) {
             throw new AppException(ErrorCode.PASSWORD_MISMATCH);

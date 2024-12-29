@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized exception", HttpStatus.INTERNAL_SERVER_ERROR),
     UNAUTHENTICATED(9001, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    TOKEN_MISSING(9002, "Token is missing", HttpStatus.UNAUTHORIZED),
     // Authentication User
     INVALID_EMAIL(1001, "Invalid email address", HttpStatus.BAD_REQUEST),
     EMAIL_ALREADY_EXISTS(1002, "Email already exists", HttpStatus.CONFLICT),

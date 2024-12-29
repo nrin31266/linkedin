@@ -1,7 +1,7 @@
 package com.linkedin.backend.features.authentication.utils;
 
 
-import com.linkedin.backend.features.authentication.model.AuthenticationUser;
+import com.linkedin.backend.features.authentication.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class JsonWebToken {
         return Keys.hmacShaKeyFor(SIGNER_KEY.getBytes());
     }
 
-    public String generateToken(AuthenticationUser user) {
+    public String generateToken(User user) {
         return Jwts.builder()
                 .id(UUID.randomUUID().toString())
                 .subject(user.getEmail())
@@ -41,12 +42,26 @@ public class JsonWebToken {
                 .compact();
     }
 
+    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimResolver.apply(claims);
+    }
+
 
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getKey())
                 .build()
-                .parseEncryptedClaims(token)
+                .parseClaimsJws(token)
                 .getPayload();
+    }
+
+
+    public boolean isTokenExpired(String token) {
+        return extractClaim(token, Claims::getExpiration).before(new Date());
+    }
+
+    public String getEmailFromToken(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 }
