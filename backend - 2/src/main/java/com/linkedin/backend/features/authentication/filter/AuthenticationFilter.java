@@ -37,6 +37,8 @@ public class AuthenticationFilter extends HttpFilter {
     );
 
     private final List<String> unsecuredPutEndpoints = Arrays.asList(
+            "/authentication/send-password-reset-token",
+            "/authentication/reset-password"
     );
 
     private final List<String> unsecuredDeleteEndpoints = Arrays.asList(

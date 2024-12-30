@@ -3,6 +3,7 @@ package com.linkedin.backend.features.authentication.controller;
 
 import com.linkedin.backend.dto.ApiResponse;
 import com.linkedin.backend.features.authentication.dto.request.AuthenticationUserRequestBody;
+import com.linkedin.backend.features.authentication.dto.request.PasswordResetRequest;
 import com.linkedin.backend.features.authentication.dto.request.SendEmailRequest;
 import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
 import com.linkedin.backend.features.authentication.model.User;
@@ -68,6 +69,23 @@ public class AuthenticationController {
         authenticationUserService.sendEmailVerifyToken(user.getEmail());
         return ApiResponse.builder()
                 .message("Send email verification code successful")
+                .build();
+    }
+
+
+    @PutMapping("/send-password-reset-token")
+    public ApiResponse sendPasswordResetToken(@RequestParam String email) {
+        authenticationUserService.sendPasswordResetToken(email);
+        return ApiResponse.builder()
+                .message("Send password reset token successful")
+                .build();
+    }
+
+    @PutMapping("/reset-password")
+    public ApiResponse resetPassword(@RequestBody @Validated PasswordResetRequest request) {
+        authenticationUserService.resetPassword(request);
+        return ApiResponse.builder()
+                .message("Password reset token successful")
                 .build();
     }
 }

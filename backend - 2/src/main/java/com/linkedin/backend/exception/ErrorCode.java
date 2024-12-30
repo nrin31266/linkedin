@@ -21,6 +21,9 @@ public enum ErrorCode {
     EMAIL_ALREADY_VERIFIED(1009, "Email already verified", HttpStatus.CONFLICT),
     EMAIL_VERIFICATION_FAILED(10010, "Email verification failed", HttpStatus.CONFLICT),
     EMAIL_VERIFICATION_EXPIRED(10011, "Email verification expire", HttpStatus.CONFLICT),
+    PASSWORD_RESET_TOKEN_EXPIRED(10012, "Password reset token expire", HttpStatus.CONFLICT),
+    PASSWORD_RESET_FAILED(10013, "Password reset failed", HttpStatus.CONFLICT),
+    NEW_PASSWORD_CAN_NOT_SAME_OLD_PASSWORD(10014, "New password cannot same old password", HttpStatus.CONFLICT),
     ;
 
 

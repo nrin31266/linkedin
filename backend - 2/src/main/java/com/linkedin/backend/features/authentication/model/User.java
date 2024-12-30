@@ -28,6 +28,8 @@ public class User {
     Date emailVerificationTokenExpiryDate;
     @JsonIgnore
     String password;
+    private String passwordResetToken;
+    private Date passwordResetTokenExpiryDate;
 
     @PrePersist
     public void prePersist() {
