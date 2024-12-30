@@ -10,18 +10,14 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: false
-  mail:
-    host: 'localhost'
-    port: 1025
-    protocol: 'smtp'
-    properties:
-      mail:
-        smtp:
-          auth: false
-    default-encoding: UTF-8
 
 jwt:
   signerKey: "HDKdDVDEpABtpunTzN2QM2pbmVzDP5jht6WGykegNKgsKDVdDlbzFVmU1vDOVOHV"
+
+brevo:
+  apiKey: ${BREVO_API_KEY}
+  email: "nrin31266@gmail.com"
+  name: "Linkedin clone by VanRin05"
 
 server:
   servlet:

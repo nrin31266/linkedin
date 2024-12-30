@@ -3,14 +3,19 @@ package com.linkedin.backend.features.authentication.controller;
 
 import com.linkedin.backend.dto.ApiResponse;
 import com.linkedin.backend.features.authentication.dto.request.AuthenticationUserRequestBody;
+import com.linkedin.backend.features.authentication.dto.request.SendEmailRequest;
 import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
 import com.linkedin.backend.features.authentication.model.User;
 import com.linkedin.backend.features.authentication.service.AuthenticationUserService;
+import com.linkedin.backend.features.authentication.utils.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/authentication")
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
     AuthenticationUserService authenticationUserService;
+    EmailService emailService;
 
 
     @GetMapping("/user")
@@ -38,6 +44,14 @@ public class AuthenticationController {
     public ApiResponse<AuthenticationUserResponseBody> login(@RequestBody @Validated AuthenticationUserRequestBody authenticationUserRequestBody) {
         return ApiResponse.<AuthenticationUserResponseBody>builder()
                 .data(authenticationUserService.login(authenticationUserRequestBody))
+                .build();
+    }
+
+    @PostMapping("/send-email")
+    public ApiResponse<?> sendEmail(@RequestBody @Validated SendEmailRequest sendEmailRequest) {
+        return ApiResponse.builder()
+                .data(emailService.sendEmail(sendEmailRequest))
+                .message("Send email successful")
                 .build();
     }
 }

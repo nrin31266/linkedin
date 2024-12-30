@@ -32,7 +32,8 @@ public class AuthenticationFilter extends HttpFilter {
 
     private final List<String> unsecuredPostEndpoints = Arrays.asList(
             "/authentication/login",
-            "/authentication/register"
+            "/authentication/register",
+            "/authentication/send-email"
     );
 
     private final List<String> unsecuredPutEndpoints = Arrays.asList(
