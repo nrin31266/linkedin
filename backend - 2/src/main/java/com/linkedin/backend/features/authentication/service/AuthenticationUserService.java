@@ -3,15 +3,24 @@ package com.linkedin.backend.features.authentication.service;
 import com.linkedin.backend.exception.AppException;
 import com.linkedin.backend.exception.ErrorCode;
 import com.linkedin.backend.features.authentication.dto.request.AuthenticationUserRequestBody;
+import com.linkedin.backend.features.authentication.dto.request.SendEmail;
+import com.linkedin.backend.features.authentication.dto.request.SendEmailRequest;
+import com.linkedin.backend.features.authentication.dto.request.Sender;
 import com.linkedin.backend.features.authentication.model.User;
 import com.linkedin.backend.features.authentication.repository.AuthenticationUserRepository;
 import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
+import com.linkedin.backend.features.authentication.utils.EmailService;
 import com.linkedin.backend.features.authentication.utils.Encoder;
 import com.linkedin.backend.features.authentication.utils.JsonWebToken;
+import com.linkedin.backend.features.authentication.utils.OneTimePasswordGenerator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -20,19 +29,34 @@ public class AuthenticationUserService {
     AuthenticationUserRepository authenticationUserRepository;
     Encoder encoder;
     JsonWebToken jsonWebToken;
+    OneTimePasswordGenerator oneTimePasswordGenerator;
+    int durationInMinutes = 1;
+    EmailService emailService;
 
     public User getUser(String email) {
         return authenticationUserRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
+
     public AuthenticationUserResponseBody register(AuthenticationUserRequestBody authenticationUserRequestBody) {
         try{
+            String emailVerificationCode = oneTimePasswordGenerator.generateOTP();
+
             User authenticationUser = authenticationUserRepository.save(
                     User.builder()
                             .email(authenticationUserRequestBody.getEmail())
-                            .password(encoder.encodePassword(authenticationUserRequestBody.getPassword()))
+                            .password(encoder.encode(authenticationUserRequestBody.getPassword()))
+                            .emailVerificationTokenExpiryDate(new Date(Instant.now().plus(durationInMinutes, ChronoUnit.MINUTES).toEpochMilli()))
+                            .emailVerificationToken(encoder.encode(emailVerificationCode))
                             .build()
             );
+
+            emailService.sendEmail(SendEmailRequest.builder()
+                            .to(authenticationUserRequestBody.getEmail())
+                            .subject("WELCOME TO LINKEDIN CLONE BY RINVAN05")
+                            .body(emailVerificationCode)
+                    .build());
+
 
             return AuthenticationUserResponseBody.builder()
                     .token(jsonWebToken.generateToken(authenticationUser))
@@ -54,4 +78,38 @@ public class AuthenticationUserService {
                 .message("User logged in successfully")
                 .build();
     }
+
+    public void sendEmailVerifyToken(String email) {
+        User user = authenticationUserRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        if(user.getEmailVerified() == null || !user.getEmailVerified()) {
+            String emailVerificationCode = oneTimePasswordGenerator.generateOTP();
+            user.setEmailVerificationToken(encoder.encode(emailVerificationCode));
+            user.setEmailVerificationTokenExpiryDate(new Date(Instant.now().plus(durationInMinutes, ChronoUnit.MINUTES).toEpochMilli()));
+            authenticationUserRepository.save(user);
+            emailService.sendEmail(SendEmailRequest.builder()
+                    .to(email)
+                    .subject("EMAIL VERIFICATION")
+                    .body(emailVerificationCode)
+                    .build());
+        }else{
+            throw new AppException(ErrorCode.EMAIL_ALREADY_VERIFIED);
+        }
+    }
+
+    public void validateEmailVerificationToken(String token, String email) {
+        User user = authenticationUserRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        if(user.getEmailVerificationToken() != null && encoder.matches(token, user.getEmailVerificationToken())) {
+            if(user.getEmailVerificationTokenExpiryDate().before(new Date())){
+                throw new AppException(ErrorCode.EMAIL_VERIFICATION_EXPIRED);
+            }
+
+            user.setEmailVerified(true);
+            user.setEmailVerificationToken(null);
+            user.setEmailVerificationTokenExpiryDate(null);
+            authenticationUserRepository.save(user);
+        }else{
+            throw new AppException(ErrorCode.EMAIL_VERIFICATION_FAILED);
+        }
+    }
+
 }

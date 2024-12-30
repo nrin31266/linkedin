@@ -21,7 +21,7 @@ public class LoadDatabaseConfiguration {
             if(authenticationUserRepository.findById(1L).isEmpty()){
                 User authenticationUser = User.builder()
                         .email("nrin31266@yopmail.com")
-                        .password(encoder.encodePassword("123"))
+                        .password(encoder.encode("123"))
                         .build();
                 authenticationUserRepository.save(authenticationUser);
                 log.warn("Admin created, please change password!");

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Encoder {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-    public String encodePassword(String rawPassword) {
+    public String encode(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
 

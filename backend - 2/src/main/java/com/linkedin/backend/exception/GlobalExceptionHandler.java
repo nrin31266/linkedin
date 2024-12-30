@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         log.error(errorCode.getMessage(), e);
         return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
                 .code(errorCode.getCode())
-                .message(e.getMessage())
+                .message(errorCode.getMessage())
                 .build());
     }
 

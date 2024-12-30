@@ -54,4 +54,20 @@ public class AuthenticationController {
                 .message("Send email successful")
                 .build();
     }
+
+    @PutMapping("/validate-email-verification-token")
+    public ApiResponse verifyEmail(@RequestParam String token, @RequestAttribute("authenticatedUser") User user) {
+        authenticationUserService.validateEmailVerificationToken(token, user.getEmail());
+        return ApiResponse.builder()
+                .message("Validate email successful")
+                .build();
+    }
+
+    @PutMapping("/send-email-verification-token")
+    public ApiResponse sendEmailVerificationToken(@RequestAttribute("authenticatedUser") User user) {
+        authenticationUserService.sendEmailVerifyToken(user.getEmail());
+        return ApiResponse.builder()
+                .message("Send email verification code successful")
+                .build();
+    }
 }

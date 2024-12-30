@@ -18,6 +18,9 @@ public enum ErrorCode {
     USER_ALREADY_EXISTS(1006, "User already exists", HttpStatus.CONFLICT),
     PASSWORD_MISMATCH(1007, "Password mismatch", HttpStatus.CONFLICT),
     TOKEN_EXPIRED(1008, "Token expired", HttpStatus.CONFLICT),
+    EMAIL_ALREADY_VERIFIED(1009, "Email already verified", HttpStatus.CONFLICT),
+    EMAIL_VERIFICATION_FAILED(10010, "Email verification failed", HttpStatus.CONFLICT),
+    EMAIL_VERIFICATION_EXPIRED(10011, "Email verification expire", HttpStatus.CONFLICT),
     ;
 
 

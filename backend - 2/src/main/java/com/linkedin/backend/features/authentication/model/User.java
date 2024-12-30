@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -20,6 +22,15 @@ public class User {
     Long id;
     @Column(unique = true, nullable = false)
     String email;
+    @Column(nullable = false)
+    Boolean emailVerified;
+    String emailVerificationToken;
+    Date emailVerificationTokenExpiryDate;
     @JsonIgnore
     String password;
+
+    @PrePersist
+    public void prePersist() {
+        emailVerified = false;
+    }
 }
