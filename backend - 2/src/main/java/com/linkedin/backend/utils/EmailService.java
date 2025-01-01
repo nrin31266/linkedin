@@ -1,4 +1,4 @@
-package com.linkedin.backend.features.authentication.utils;
+package com.linkedin.backend.utils;
 
 import com.linkedin.backend.features.authentication.dto.request.Receive;
 import com.linkedin.backend.features.authentication.dto.request.SendEmail;

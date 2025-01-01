@@ -6,7 +6,7 @@ import com.linkedin.backend.features.authentication.dto.request.*;
 import com.linkedin.backend.features.authentication.model.User;
 import com.linkedin.backend.features.authentication.repository.AuthenticationUserRepository;
 import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
-import com.linkedin.backend.features.authentication.utils.EmailService;
+import com.linkedin.backend.utils.EmailService;
 import com.linkedin.backend.features.authentication.utils.Encoder;
 import com.linkedin.backend.features.authentication.utils.JsonWebToken;
 import com.linkedin.backend.features.authentication.utils.OneTimePasswordGenerator;

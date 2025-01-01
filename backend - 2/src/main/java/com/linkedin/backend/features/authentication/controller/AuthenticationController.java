@@ -8,15 +8,12 @@ import com.linkedin.backend.features.authentication.dto.request.SendEmailRequest
 import com.linkedin.backend.features.authentication.dto.response.AuthenticationUserResponseBody;
 import com.linkedin.backend.features.authentication.model.User;
 import com.linkedin.backend.features.authentication.service.AuthenticationUserService;
-import com.linkedin.backend.features.authentication.utils.EmailService;
-import jakarta.mail.MessagingException;
+import com.linkedin.backend.utils.EmailService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/authentication")
