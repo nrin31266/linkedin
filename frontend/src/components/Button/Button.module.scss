@@ -1,0 +1,32 @@
+.root{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    color: white;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 9999px;
+    margin-block: 1rem;
+    font-weight: bold;
+    transition: 0.3s;
+
+
+    &:disabled{
+        color: black;
+        background-color: rgb(217, 217, 217);
+        cursor: not-allowed;
+    }
+
+    &:not(:disabled, .outline):hover{
+        background-color: var(--primary-color-dark);
+    }
+
+    &.outline {
+        background-color: white;
+        color: var(--primary-color);
+        border: 1px solid rgba(0,0,0,0.6);
+        padding: 0.5rem;
+        font-weight: normal;
+    }
+}
